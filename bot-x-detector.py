@@ -309,6 +309,11 @@ class XDetectorBot:
 
                 resized = cv2.resize(template, (width, height))
 
+                # Omitir si el template redimensionado es más grande que la imagen
+                if (resized.shape[0] > gray.shape[0] or
+                        resized.shape[1] > gray.shape[1]):
+                    continue
+
                 # Template matching
                 result = cv2.matchTemplate(gray, resized, cv2.TM_CCOEFF_NORMED)
 
@@ -343,6 +348,14 @@ class XDetectorBot:
         # 1. Buscar por template si existe
         for template_data in self.money_templates:
             template = template_data['image']
+            if (template.shape[0] > search_zone_gray.shape[0] or
+                    template.shape[1] > search_zone_gray.shape[1]):
+                logging.debug(
+                    "Template '%s' omitido: tamaño (%s, %s) mayor que zona (%s, %s)",
+                    template_data['name'], template.shape[1], template.shape[0],
+                    search_zone_gray.shape[1], search_zone_gray.shape[0])
+                continue
+
             result = cv2.matchTemplate(
                 search_zone_gray, template, cv2.TM_CCOEFF_NORMED)
 
