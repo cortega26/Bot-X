@@ -1,0 +1,89 @@
+2025-09-25 12:58:23,306 - INFO - Template de X cargado: x_template_1.png
+2025-09-25 12:58:23,306 - INFO - Bot inicializado con configuración: {'screenshot_interval': 0.5, 'confidence_threshold': 0.75, 'click_delay': 0.5, 'safe_mode': True, 'detection_methods': ['template', 'contour', 'ocr', 'color'], 'templates_folder': 'templates', 'click_offset': {'x': 0, 'y': 0}, 'region': None, 'max_clicks_per_minute': 60, 'enable_anti_detection': True, 'money_button_zone': 0.7, 'wait_after_x': 1.0, 'auto_click_money': True}
+2025-09-25 13:00:41,605 - INFO - ✅ Template #1 guardado: x_template_2.png
+2025-09-25 13:00:46,004 - INFO - ✅ Template #2 guardado: x_template_3.png
+2025-09-25 13:00:50,529 - INFO - ✅ Template #3 guardado: x_template_4.png
+2025-09-25 13:01:04,685 - INFO - Template de X cargado: x_template_1.png
+2025-09-25 13:01:04,704 - INFO - Template de X cargado: x_template_2.png
+2025-09-25 13:01:04,714 - INFO - Template de X cargado: x_template_3.png
+2025-09-25 13:01:04,725 - INFO - Template de X cargado: x_template_4.png
+2025-09-25 13:01:44,671 - INFO - Template de X cargado: x_template_1.png
+2025-09-25 13:01:44,672 - INFO - Template de X cargado: x_template_2.png
+2025-09-25 13:01:44,672 - INFO - Template de X cargado: x_template_3.png
+2025-09-25 13:01:44,672 - INFO - Template de X cargado: x_template_4.png
+2025-09-25 13:01:44,672 - INFO - Bot inicializado con configuración: {'screenshot_interval': 0.5, 'confidence_threshold': 0.75, 'click_delay': 0.5, 'safe_mode': True, 'detection_methods': ['template', 'contour', 'ocr', 'color'], 'templates_folder': 'templates', 'click_offset': {'x': 0, 'y': 0}, 'region': None, 'max_clicks_per_minute': 60, 'enable_anti_detection': True, 'money_button_zone': 0.7, 'wait_after_x': 1.0, 'auto_click_money': True}
+2025-09-25 13:01:45,710 - INFO - Bot iniciado correctamente
+2025-09-25 13:01:45,711 - INFO - Buscando X y botones de monedas...
+2025-09-25 13:01:49,803 - INFO - [X:ad_dismiss] Acción guiada en (31, 1040)
+2025-09-25 13:01:50,911 - INFO - [X] Clic en X realizado en (1948, 1081) - Total X: 1
+2025-09-25 13:01:53,261 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:01:53,266 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:01:54,255 - INFO - [X] Detectada en (574, 1041) con confianza 0.91 usando métodos: ['template']
+2025-09-25 13:01:54,801 - INFO - [X] Clic en X realizado en (2491, 1082) - Total X: 2
+2025-09-25 13:01:57,780 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:01:57,792 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:01:58,660 - INFO - [X:ad_dismiss] Acción guiada en (31, 1040)
+2025-09-25 13:01:59,691 - INFO - [X] Clic en X realizado en (1948, 1081) - Total X: 3
+2025-09-25 13:02:00,786 - INFO - 📊 Estadísticas - X cerradas: 3, Ads vistos: 2
+2025-09-25 13:02:02,894 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:02:02,900 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:02:03,079 - INFO - [X] Detectada en (574, 1041) con confianza 0.91 usando métodos: ['template']
+2025-09-25 13:02:04,039 - INFO - [X] Clic en X realizado en (2491, 1082) - Total X: 4
+2025-09-25 13:02:06,695 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:02:06,707 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:02:07,501 - INFO - [X:ad_dismiss] Acción guiada en (31, 1040)
+2025-09-25 13:02:08,852 - INFO - [X] Clic en X realizado en (1948, 1081) - Total X: 5
+2025-09-25 13:02:11,913 - INFO - [X] Detectada en (574, 1041) con confianza 0.91 usando métodos: ['template']
+2025-09-25 13:02:11,914 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:02:11,960 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:02:12,844 - INFO - [X] Clic en X realizado en (2491, 1082) - Total X: 6
+2025-09-25 13:02:15,523 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:02:15,534 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:02:17,408 - INFO - [X:ad_dismiss] Acción guiada en (31, 1040)
+2025-09-25 13:02:18,247 - INFO - [X] Clic en X realizado en (1948, 1081) - Total X: 7
+2025-09-25 13:02:21,079 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:02:21,090 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:02:21,705 - ERROR - Error en clic fallback: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:02:30,948 - INFO - 📊 Estadísticas - X cerradas: 7, Ads vistos: 6
+2025-09-25 13:02:54,582 - INFO - Deteniendo bot...
+2025-09-25 13:02:56,593 - INFO - Bot detenido. X cerradas: 7, Ads completados: 6
+2025-09-25 13:03:10,938 - INFO - [X:ad_dismiss] Acción guiada en (333, 624)
+2025-09-25 13:17:29,114 - INFO - Template de X cargado: Continuar.png
+2025-09-25 13:17:29,119 - INFO - Template de X cargado: pantalla_inicial.png
+2025-09-25 13:17:29,127 - INFO - Template de X cargado: recompensa_conseguida.png
+2025-09-25 13:17:29,141 - INFO - Template de X cargado: recompensa_en_x_segundos.png
+2025-09-25 13:17:29,141 - INFO - Bot inicializado con configuración: {'screenshot_interval': 0.5, 'confidence_threshold': 0.75, 'click_delay': 0.5, 'safe_mode': True, 'detection_methods': ['template', 'contour', 'ocr', 'color'], 'templates_folder': 'templates', 'click_offset': {'x': 0, 'y': 0}, 'region': None, 'max_clicks_per_minute': 60, 'enable_anti_detection': True, 'money_button_zone': 0.7, 'wait_after_x': 1.0, 'auto_click_money': True}
+2025-09-25 13:19:32,558 - INFO - Template de X cargado: Continuar.png
+2025-09-25 13:19:32,562 - INFO - Template de X cargado: pantalla_inicial.png
+2025-09-25 13:19:32,569 - INFO - Template de X cargado: recompensa_conseguida.png
+2025-09-25 13:19:32,583 - INFO - Template de X cargado: recompensa_en_x_segundos.png
+2025-09-25 13:19:32,600 - INFO - Template de X cargado: x_template_1.png
+2025-09-25 13:19:32,610 - INFO - Template de X cargado: x_template_2.png
+2025-09-25 13:19:32,624 - INFO - Template de X cargado: x_template_3.png
+2025-09-25 13:20:07,836 - INFO - Template de X cargado: Continuar.png
+2025-09-25 13:20:07,850 - INFO - Template de monedas cargado: money_button_1.png
+2025-09-25 13:20:07,854 - INFO - Template de X cargado: pantalla_inicial.png
+2025-09-25 13:20:07,862 - INFO - Template de X cargado: recompensa_conseguida.png
+2025-09-25 13:20:07,876 - INFO - Template de X cargado: recompensa_en_x_segundos.png
+2025-09-25 13:20:07,880 - INFO - Template de X cargado: x_template_1.png
+2025-09-25 13:20:07,882 - INFO - Template de X cargado: x_template_2.png
+2025-09-25 13:20:07,887 - INFO - Template de X cargado: x_template_3.png
+2025-09-25 13:20:22,206 - INFO - Bot iniciado correctamente
+2025-09-25 13:20:22,206 - INFO - Buscando X y botones de monedas...
+2025-09-25 13:20:24,430 - INFO - [X:ad_dismiss] Acción guiada en (304, 601)
+2025-09-25 13:20:24,895 - INFO - [X] Clic en X realizado en (2217, 688) - Total X: 1
+2025-09-25 13:20:26,801 - ERROR - Error procesando clics: OpenCV(4.12.0) D:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\templmatch.cpp:1179: error: (-215:Assertion failed) _img.size().height <= _templ.size().height && _img.size().width <= _templ.size().width in function 'cv::matchTemplate'
+
+2025-09-25 13:20:30,209 - INFO - 📊 Estadísticas - X cerradas: 1, Ads vistos: 0
+2025-09-25 13:21:00,263 - INFO - 📊 Estadísticas - X cerradas: 1, Ads vistos: 0
+2025-09-25 13:21:04,376 - INFO - Deteniendo bot...
+2025-09-25 13:21:06,377 - INFO - Bot detenido. X cerradas: 1, Ads completados: 0
+2025-09-25 13:21:38,352 - INFO - Bot iniciado correctamente
+2025-09-25 13:21:38,352 - INFO - Buscando X y botones de monedas...
+2025-09-25 13:21:40,592 - INFO - [X:ad_dismiss] Acción guiada en (304, 602)
+2025-09-25 13:21:41,498 - INFO - [X] Clic en X realizado en (2217, 688) - Total X: 2
+2025-09-25 13:21:43,478 - ERROR - Error procesando clics: OpenCV(4.12.0) D:\a\opencv-python\opencv-python\opencv\modules\imgproc\src\templmatch.cpp:1179: error: (-215:Assertion failed) _img.size().height <= _templ.size().height && _img.size().width <= _templ.size().width in function 'cv::matchTemplate'
+
+2025-09-25 13:22:00,399 - INFO - 📊 Estadísticas - X cerradas: 2, Ads vistos: 0
+2025-09-25 13:22:14,900 - INFO - Deteniendo bot...
+2025-09-25 13:22:16,900 - INFO - Bot detenido. X cerradas: 2, Ads completados: 0
