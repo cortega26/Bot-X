@@ -14,8 +14,10 @@ import hashlib
 import tkinter as tk
 from tkinter import messagebox
 import re
+import glob
+import shlex
 
-from calibration_utils import compute_display_scale, map_display_to_image_coords
+from calibration_utils import import_reference_templates
 from screen_state import OCRToken, ScreenState, analyze_tokens
 
 # Configuración de logging
@@ -1061,183 +1063,136 @@ class XDetectorBot:
         logging.info(
             f"Bot detenido. X cerradas: {self.click_count}, Ads completados: {self.ad_count}")
 
+    def _parse_reference_input(self, raw: str) -> list[str]:
+        parts = []
+
+        try:
+            tokens = shlex.split(raw)
+        except ValueError as exc:
+            raise ValueError(f"no se pudieron interpretar las rutas: {exc}") from exc
+
+        for token in tokens:
+            for candidate in token.split(','):
+                path = candidate.strip()
+                if path:
+                    parts.append(path)
+
+        if not parts:
+            raise ValueError("no se ingresaron rutas válidas")
+
+        return parts
+
     def calibrate_x(self):
-        """Calibrate X templates using mouse clicks inside the preview window."""
+        """Import X templates from provided reference images."""
 
-        print("\n" + "="*50)
-        print("    CALIBRACIÓN DE TEMPLATES DE X (MODO CLICK)")
-        print("="*50)
-
-        if not self.config['region']:
-            print("\n⚠️ Primero configura la región (opción 1)")
-            return
-
-        print("\n📌 NUEVO FLUJO:")
-        print("   1. Se abrirá una ventana con la vista de BlueStacks.")
-        print("   2. Haz CLICK IZQUIERDO sobre cada X que quieras capturar.")
-        print("   3. Presiona Q o Esc para terminar.")
-        print("\n💡 Consejo: Si la ventana tapa BlueStacks, muévela y sigue capturando.")
-        print("="*50)
-
-        input("\n👉 Presiona ENTER cuando estés listo...")
+        print("\n" + "=" * 50)
+        print("    CALIBRACIÓN DE TEMPLATES DE X (MODO ARCHIVO)")
+        print("=" * 50)
 
         folder = self.config['templates_folder']
         os.makedirs(folder, exist_ok=True)
 
-        existing = [
-            f for f in os.listdir(folder)
-            if f.lower().startswith('x_template')
-        ]
-        template_count = len(existing)
-        captures = 0
+        suggested = sorted(
+            glob.glob(os.path.join(folder, "reference", "x*.png"))
+            + glob.glob(os.path.join(folder, "reference", "*continuar*.png"))
+        )
 
-        window_name = "Calibración de X — Click para capturar | Q/Esc para salir"
-        cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
+        if suggested:
+            print("\n📂 Se detectaron imágenes de referencia potenciales:")
+            for path in suggested:
+                print(f"   • {path}")
 
-        _, _, width, height = self.config['region']
-        scale = compute_display_scale(width, height)
+        print("\n📌 Instrucciones:")
+        print("   1. Usa las capturas provistas del flujo 'X/Continuar'.")
+        print("   2. Ingresa la ruta del archivo (o varias separadas por coma).")
+        print("   3. Los templates se copiarán a la carpeta de trabajo.")
 
-        last_frame = {'image': None}
+        raw_input = input("\n👉 Ruta(s) de imágenes: ").strip()
 
-        def on_mouse(event, x, y, flags, param):
-            nonlocal template_count, captures
-            if event == cv2.EVENT_LBUTTONDOWN and last_frame['image'] is not None:
-                frame = last_frame['image']
-                x_img, y_img = map_display_to_image_coords(x, y, scale)
-
-                size = 50
-                x1 = max(0, x_img - size // 2)
-                y1 = max(0, y_img - size // 2)
-                x2 = min(frame.shape[1], x_img + size // 2)
-                y2 = min(frame.shape[0], y_img + size // 2)
-
-                if x2 <= x1 or y2 <= y1:
-                    logging.info("⚠️  Área de captura inválida; ignora clic")
-                    return
-
-                roi = frame[y1:y2, x1:x2]
-                if roi.shape[0] < 20 or roi.shape[1] < 20:
-                    logging.info("⚠️  Región demasiado pequeña; ignora clic")
-                    return
-
-                template_count += 1
-                captures += 1
-                filename = f"x_template_{template_count}.png"
-                filepath = os.path.join(folder, filename)
-                cv2.imwrite(filepath, roi)
-                logging.info("✅ Template #%s guardado: %s", captures, filename)
-
-        cv2.setMouseCallback(window_name, on_mouse)
+        if not raw_input:
+            print("\n⚠️ Calibración cancelada: no se ingresaron rutas.")
+            return
 
         try:
-            while True:
-                frame = self.take_screenshot()
-                if frame is None:
-                    time.sleep(0.05)
-                    continue
+            paths = self._parse_reference_input(raw_input)
+        except ValueError as exc:
+            print(f"\n❌ Error interpretando rutas: {exc}")
+            return
 
-                last_frame['image'] = frame
-                display = frame.copy()
+        try:
+            saved = import_reference_templates(paths, folder, "x_template")
+        except FileNotFoundError as exc:
+            print(f"\n❌ {exc}")
+            return
+        except ValueError as exc:
+            print(f"\n❌ Error procesando imágenes: {exc}")
+            return
 
-                cv2.putText(display, "CLICK: capturar | Q/Esc: salir", (10, 30),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
-                cv2.putText(display, f"Capturas: {captures}", (10, 60),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 255), 2)
+        self.load_templates()
 
-                if scale != 1.0:
-                    disp = cv2.resize(
-                        display,
-                        (int(width * scale), int(height * scale)),
-                        interpolation=cv2.INTER_AREA
-                    )
-                else:
-                    disp = display
-
-                cv2.imshow(window_name, disp)
-                key = cv2.waitKey(30) & 0xFF
-                if key in (ord('q'), ord('Q'), 27):
-                    break
-
-            cv2.destroyAllWindows()
-            self.load_templates()
-
-            print("\n" + "="*50)
-            print("✅ CALIBRACIÓN COMPLETADA")
-            print(f"   Templates capturados en esta sesión: {captures}")
-            print(
-                f"   Total de templates de X disponibles: {len(self.x_templates)}")
-            print("="*50)
-
-        except Exception as e:
-            cv2.destroyAllWindows()
-            print(f"\n❌ Error durante calibración: {e}")
-            print("   Intenta nuevamente")
+        print("\n" + "=" * 50)
+        print("✅ CALIBRACIÓN COMPLETADA")
+        print(f"   Templates importados: {len(saved)}")
+        print("   Archivos:")
+        for name in saved:
+            print(f"   • {name}")
+        print("=" * 50)
 
     def calibrate_money(self):
-        """
-        Modo de calibración para capturar templates del botón de monedas
-        """
-        print("\n=== CALIBRACIÓN DE BOTÓN DE MONEDAS ===")
-        print("1. Posiciona el cursor sobre el botón de '+200 monedas'")
-        print("2. Presiona 'c' para capturar")
-        print("3. Presiona 'q' para salir")
+        """Import money button templates from reference screenshots."""
 
-        cv2.namedWindow("Calibracion Monedas")
-        template_count = len([f for f in os.listdir(self.config['templates_folder'])
-                              if 'money' in f])
+        print("\n" + "=" * 50)
+        print("    CALIBRACIÓN DE BOTÓN '+200 MONEDAS' (MODO ARCHIVO)")
+        print("=" * 50)
 
-        while True:
-            screenshot = self.take_screenshot()
-            if screenshot is not None:
-                # Marcar zona inferior
-                height = screenshot.shape[0]
-                zone_y = int(height * self.config['money_button_zone'])
-                cv2.line(screenshot, (0, zone_y),
-                         (screenshot.shape[1], zone_y), (0, 255, 0), 2)
-                cv2.putText(screenshot, "Zona de busqueda de boton", (10, zone_y - 10),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+        folder = self.config['templates_folder']
+        os.makedirs(folder, exist_ok=True)
 
-                cv2.imshow("Calibracion Monedas",
-                           cv2.resize(screenshot, (800, 600)))
+        suggested = sorted(
+            glob.glob(os.path.join(folder, "reference", "money*.png"))
+            + glob.glob(os.path.join(folder, "reference", "*monedas*.png"))
+        )
 
-            key = cv2.waitKey(1) & 0xFF
+        if suggested:
+            print("\n📂 Se detectaron imágenes de referencia potenciales:")
+            for path in suggested:
+                print(f"   • {path}")
 
-            if key == ord('c'):
-                if screenshot is not None:
-                    # Obtener posición del mouse
-                    x, y = pyautogui.position()
+        print("\n📌 Instrucciones:")
+        print("   1. Selecciona la captura con '+200 monedas por ver un anuncio'.")
+        print("   2. Ingresa la ruta del archivo (o varias separadas por coma).")
+        print("   3. Los templates se copiarán listos para usarse.")
 
-                    # Ajustar para región
-                    if self.config['region']:
-                        x -= self.config['region'][0]
-                        y -= self.config['region'][1]
+        raw_input = input("\n👉 Ruta(s) de imágenes: ").strip()
 
-                    # Extraer región más grande para botones (150x80 píxeles)
-                    width_size = 150
-                    height_size = 80
-                    x1 = max(0, x - width_size // 2)
-                    y1 = max(0, y - height_size // 2)
-                    x2 = min(screenshot.shape[1], x + width_size // 2)
-                    y2 = min(screenshot.shape[0], y + height_size // 2)
+        if not raw_input:
+            print("\n⚠️ Calibración cancelada: no se ingresaron rutas.")
+            return
 
-                    roi = screenshot[y1:y2, x1:x2]
+        try:
+            paths = self._parse_reference_input(raw_input)
+        except ValueError as exc:
+            print(f"\n❌ Error interpretando rutas: {exc}")
+            return
 
-                    # Guardar template
-                    template_count += 1
-                    filename = f"money_button_{template_count}.png"
-                    filepath = os.path.join(
-                        self.config['templates_folder'], filename)
-                    cv2.imwrite(filepath, roi)
+        try:
+            saved = import_reference_templates(paths, folder, "money_button")
+        except FileNotFoundError as exc:
+            print(f"\n❌ {exc}")
+            return
+        except ValueError as exc:
+            print(f"\n❌ Error procesando imágenes: {exc}")
+            return
 
-                    print(
-                        f"✓ Template de botón de monedas guardado: {filename}")
-
-            elif key == ord('q'):
-                break
-
-        cv2.destroyAllWindows()
         self.load_templates()
-        print("Calibración de botón completada")
+
+        print("\n" + "=" * 50)
+        print("✅ CALIBRACIÓN COMPLETADA")
+        print(f"   Templates importados: {len(saved)}")
+        print("   Archivos:")
+        for name in saved:
+            print(f"   • {name}")
+        print("=" * 50)
 
 
 def main_menu():
