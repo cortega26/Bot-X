@@ -118,3 +118,225 @@
 2025-09-25 13:36:47,274 - INFO - [💰] Intento fallback de clic en zona inferior
 2025-09-25 13:36:47,732 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['color', 'contour']
 2025-09-25 13:36:49,150 - INFO - Bot detenido. X cerradas: 3, Ads completados: 3
+2025-09-25 13:36:53,247 - INFO - Template de X cargado: Continuar.png
+2025-09-25 13:36:53,249 - INFO - Template de monedas cargado: money_button_1.png
+2025-09-25 13:36:53,253 - INFO - Template de X cargado: pantalla_inicial.png
+2025-09-25 13:36:53,260 - INFO - Template de X cargado: recompensa_conseguida.png
+2025-09-25 13:36:53,275 - INFO - Template de X cargado: recompensa_en_x_segundos.png
+2025-09-25 13:36:53,279 - INFO - Template de X cargado: x_template_1.png
+2025-09-25 13:36:53,282 - INFO - Template de X cargado: x_template_2.png
+2025-09-25 13:36:53,287 - INFO - Template de X cargado: x_template_3.png
+2025-09-25 13:36:53,287 - INFO - Bot inicializado con configuración: {'screenshot_interval': 0.5, 'confidence_threshold': 0.75, 'click_delay': 0.5, 'safe_mode': True, 'detection_methods': ['template', 'contour', 'ocr', 'color'], 'templates_folder': 'templates', 'click_offset': {'x': 0, 'y': 0}, 'region': None, 'max_clicks_per_minute': 60, 'enable_anti_detection': True, 'money_button_zone': 0.7, 'wait_after_x': 1.0, 'auto_click_money': True}
+2025-09-25 13:37:13,390 - INFO - Bot iniciado correctamente
+2025-09-25 13:37:13,391 - INFO - Buscando X y botones de monedas...
+2025-09-25 13:37:14,427 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:37:14,892 - INFO - [X] Clic en X realizado en (2293, 865) - Total X: 1
+2025-09-25 13:37:15,649 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:37:16,787 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:37:17,021 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:37:17,021 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:37:17,984 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:37:18,516 - INFO - [X] Clic en X realizado en (2394, 498) - Total X: 2
+2025-09-25 13:37:19,251 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:37:20,378 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:37:20,513 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:37:20,514 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:37:21,672 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:37:21,837 - INFO - [X] Clic en X realizado en (2293, 865) - Total X: 3
+2025-09-25 13:37:22,905 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:37:23,813 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:37:23,813 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:37:24,056 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:37:25,240 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:37:25,401 - INFO - [X] Clic en X realizado en (2394, 498) - Total X: 4
+2025-09-25 13:37:26,389 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:37:27,511 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:37:27,511 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:37:27,542 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:37:28,574 - INFO - [X] Clic en X realizado en (2293, 865) - Total X: 5
+2025-09-25 13:37:28,890 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:37:30,025 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:37:30,509 - INFO - 📊 Estadísticas - X cerradas: 5, Ads vistos: 4
+2025-09-25 13:37:30,527 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:37:30,527 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:37:31,209 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:37:31,876 - INFO - [X] Clic en X realizado en (2394, 498) - Total X: 6
+2025-09-25 13:37:32,364 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:37:33,539 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:37:34,034 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:37:34,034 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:37:34,704 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:37:35,559 - INFO - [X] Clic en X realizado en (2293, 865) - Total X: 7
+2025-09-25 13:37:35,883 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:37:36,991 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:37:37,712 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:37:37,713 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:37:38,131 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:37:39,371 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:37:39,526 - INFO - [X] Clic en X realizado en (2394, 498) - Total X: 8
+2025-09-25 13:37:40,539 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:37:41,662 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:37:41,662 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:37:41,763 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:37:42,901 - INFO - [X] Clic en X realizado en (2293, 865) - Total X: 9
+2025-09-25 13:37:42,909 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:37:44,104 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:37:45,003 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:37:45,004 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:37:45,354 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:37:46,294 - INFO - [X] Clic en X realizado en (2394, 498) - Total X: 10
+2025-09-25 13:37:48,340 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:37:48,340 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:37:49,534 - INFO - [X] Clic en X realizado en (2293, 865) - Total X: 11
+2025-09-25 13:37:51,329 - INFO - [X:ad_dismiss] Acción guiada en (272, 715)
+2025-09-25 13:37:51,620 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:37:51,621 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:37:53,061 - INFO - [X] Clic en X realizado en (2394, 498) - Total X: 12
+2025-09-25 13:37:55,179 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:37:55,179 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:37:56,293 - INFO - [X] Clic en X realizado en (2293, 865) - Total X: 13
+2025-09-25 13:37:58,233 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:37:58,233 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:37:59,444 - INFO - [X] Clic en X realizado en (2394, 498) - Total X: 14
+2025-09-25 13:38:00,519 - INFO - 📊 Estadísticas - X cerradas: 14, Ads vistos: 13
+2025-09-25 13:38:01,506 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:38:01,507 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:38:02,756 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:38:02,757 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:38:02,757 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:38:02,758 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:38:02,758 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:38:02,758 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:38:02,759 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:38:02,759 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:38:02,759 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:38:02,759 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:38:02,759 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:38:02,760 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:38:02,760 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:38:02,760 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:38:11,925 - INFO - Deteniendo bot...
+2025-09-25 13:38:13,926 - INFO - Bot detenido. X cerradas: 14, Ads completados: 14
+2025-09-25 13:41:39,087 - INFO - Bot iniciado correctamente
+2025-09-25 13:41:39,088 - INFO - Buscando X y botones de monedas...
+2025-09-25 13:41:40,068 - INFO - [X:ad_dismiss] Acción guiada en (180, 906)
+2025-09-25 13:41:40,947 - INFO - [X] Clic en X realizado en (2093, 992) - Total X: 15
+2025-09-25 13:41:42,488 - INFO - [X:ad_dismiss] Acción guiada en (95, 973)
+2025-09-25 13:41:42,852 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:41:42,852 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:41:43,938 - INFO - [X] Clic en X realizado en (2008, 1059) - Total X: 16
+2025-09-25 13:41:44,851 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:41:45,962 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:41:45,962 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:41:45,966 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:41:47,030 - INFO - [X] Clic en X realizado en (2293, 865) - Total X: 17
+2025-09-25 13:41:47,072 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:41:48,236 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:41:48,979 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:41:48,979 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:41:49,341 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:41:49,988 - INFO - [X] Clic en X realizado en (2394, 498) - Total X: 18
+2025-09-25 13:41:50,485 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:41:51,520 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:41:52,148 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:41:52,148 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:41:52,641 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:41:53,385 - INFO - [X] Clic en X realizado en (2293, 865) - Total X: 19
+2025-09-25 13:41:53,865 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:41:55,007 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:41:55,339 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:41:55,339 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:41:56,103 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:41:56,537 - INFO - [X] Clic en X realizado en (2394, 498) - Total X: 20
+2025-09-25 13:41:57,236 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:41:58,378 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:41:58,681 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:41:58,682 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:41:59,480 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:42:00,162 - INFO - 📊 Estadísticas - X cerradas: 20, Ads vistos: 20
+2025-09-25 13:42:00,246 - INFO - [X] Clic en X realizado en (2293, 865) - Total X: 21
+2025-09-25 13:42:00,754 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:42:01,804 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:42:02,350 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:42:02,351 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:42:02,964 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:42:03,766 - INFO - [X] Clic en X realizado en (2394, 498) - Total X: 22
+2025-09-25 13:42:04,166 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:42:05,215 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:42:05,882 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:42:05,882 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:42:06,380 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:42:07,513 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:42:07,733 - INFO - [X] Clic en X realizado en (2293, 865) - Total X: 23
+2025-09-25 13:42:08,618 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:42:09,838 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:42:09,839 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:42:09,894 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:42:11,039 - INFO - [X:ad_dismiss] Acción guiada en (340, 735)
+2025-09-25 13:42:11,371 - INFO - [X] Clic en X realizado en (2394, 498) - Total X: 24
+2025-09-25 13:42:13,376 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:42:13,376 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:42:14,951 - INFO - [X] Clic en X realizado en (2293, 865) - Total X: 25
+2025-09-25 13:42:16,899 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:42:16,899 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:42:17,873 - INFO - [X] Clic en X realizado en (2394, 498) - Total X: 26
+2025-09-25 13:42:19,868 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:42:19,868 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:42:21,064 - INFO - [X] Clic en X realizado en (2293, 865) - Total X: 27
+2025-09-25 13:42:23,154 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:42:23,154 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:42:24,201 - INFO - [X] Clic en X realizado en (2394, 498) - Total X: 28
+2025-09-25 13:42:26,205 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:42:26,205 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:42:26,924 - INFO - [X:ad_dismiss] Acción guiada en (95, 973)
+2025-09-25 13:42:27,507 - INFO - [X] Clic en X realizado en (2293, 865) - Total X: 29
+2025-09-25 13:42:28,067 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:42:29,211 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:42:29,631 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:42:29,631 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:42:30,209 - INFO - 📊 Estadísticas - X cerradas: 29, Ads vistos: 29
+2025-09-25 13:42:30,473 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:42:31,251 - INFO - [X] Clic en X realizado en (2394, 498) - Total X: 30
+2025-09-25 13:42:31,635 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:42:32,818 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:42:33,372 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:42:33,372 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:42:33,493 - ERROR - Error en clic fallback: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:33,494 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:33,494 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:33,495 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:33,495 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:33,495 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:33,496 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:33,496 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:33,497 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:33,497 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:33,497 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:33,497 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:33,498 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:33,498 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:33,498 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:33,499 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:33,499 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:34,042 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:42:34,310 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:35,278 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:42:35,328 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:36,415 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:42:37,347 - INFO - [X] Clic en X realizado en (2394, 498) - Total X: 31
+2025-09-25 13:42:37,649 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:42:37,976 - ERROR - Error procesando clics: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:37,977 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:38,830 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:42:38,881 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:40,085 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:42:40,185 - ERROR - Error al hacer clic: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2025-09-25 13:42:41,264 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:42:41,947 - INFO - [X] Clic en X realizado en (2394, 498) - Total X: 32
+2025-09-25 13:42:42,391 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:42:43,514 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['contour', 'color']
+2025-09-25 13:42:43,746 - INFO - Deteniendo bot...
+2025-09-25 13:42:43,994 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:42:43,995 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:42:44,757 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:42:45,747 - INFO - Bot detenido. X cerradas: 32, Ads completados: 30
