@@ -9,13 +9,14 @@ import json
 from threading import Thread
 from queue import Queue
 import pytesseract
-from PIL import Image, ImageDraw
+from PIL import Image
 import hashlib
 import tkinter as tk
 from tkinter import messagebox
 import re
 
 from calibration_utils import compute_display_scale, map_display_to_image_coords
+from screen_state import OCRToken, ScreenState, analyze_tokens
 
 # Configuración de logging
 logging.basicConfig(
@@ -146,6 +147,9 @@ class XDetectorBot:
         self.click_count = 0
         self.ad_count = 0
         self.last_x_click_time = 0
+        self.last_special_state = ScreenState.UNKNOWN
+        self.last_special_hash = None
+        self.last_special_time = 0.0
 
         # Configuración por defecto
         self.config = {
@@ -623,6 +627,114 @@ class XDetectorBot:
 
         return merged
 
+    def _extract_ocr_tokens(self, screenshot):
+        """Convert pytesseract raw output into ``OCRToken`` instances."""
+
+        try:
+            pil_image = Image.fromarray(
+                cv2.cvtColor(screenshot, cv2.COLOR_BGR2RGB))
+            data = pytesseract.image_to_data(
+                pil_image,
+                output_type=pytesseract.Output.DICT,
+                lang='spa+eng')
+        except Exception as exc:
+            logging.debug("Error extrayendo OCR: %s", exc)
+            return []
+
+        tokens = []
+        texts = data.get('text', [])
+        n = len(texts)
+
+        for i in range(n):
+            text = (texts[i] or '').strip()
+            if not text:
+                continue
+
+            try:
+                confidence_str = data.get('conf', [])[i]
+            except IndexError:
+                confidence_str = '-1'
+
+            try:
+                confidence = float(confidence_str)
+            except Exception:
+                confidence = -1.0
+
+            try:
+                left = int(data.get('left', [0])[i])
+                top = int(data.get('top', [0])[i])
+                width = int(data.get('width', [0])[i])
+                height = int(data.get('height', [0])[i])
+            except Exception:
+                continue
+
+            tokens.append(OCRToken(
+                text=text,
+                left=left,
+                top=top,
+                width=width,
+                height=height,
+                confidence=confidence,
+            ))
+
+        return tokens
+
+    def _select_x_by_zone(self, detections, y_min, y_max):
+        """Return the most confident X detection inside vertical bounds."""
+
+        candidates = [
+            d for d in detections
+            if y_min <= d.get('y', 0) <= y_max
+        ]
+
+        if not candidates:
+            return None
+
+        return max(candidates, key=lambda d: d.get('confidence', 0))
+
+    def _enqueue_special_action(self, click_type, state, point, frame_shape):
+        """Queue a high-priority click derived from contextual analysis."""
+
+        if point is None:
+            return False
+
+        height, width = frame_shape[:2]
+        x = max(0, min(width - 1, int(point[0])))
+        y = max(0, min(height - 1, int(point[1])))
+
+        action_hash = f"{state.value}:{click_type}:{x // 5}:{y // 5}"
+        now = time.time()
+
+        if (self.last_special_hash == action_hash and
+                now - self.last_special_time < 1.5):
+            return False
+
+        queue_payload = {'x': x, 'y': y, 'type': click_type}
+
+        if click_type == 'x':
+            detection_hash = hashlib.md5(f"{x}{y}".encode()).hexdigest()
+            if detection_hash == self.last_click_hash:
+                return False
+            self.last_click_hash = detection_hash
+        else:
+            detection_hash = None
+
+        self.click_queue.put(queue_payload)
+
+        self.last_special_hash = action_hash
+        self.last_special_time = now
+        self.last_special_state = state
+
+        if click_type == 'x':
+            logging.info(
+                "[X:%s] Acción guiada en (%s, %s)", state.value, x, y)
+        elif click_type == 'continue':
+            logging.info("[➡️] Continuar detectado en (%s, %s)", x, y)
+        elif click_type == 'money':
+            logging.info("[💰] Botón de recompensa detectado en (%s, %s)", x, y)
+
+        return True
+
     def apply_anti_detection(self):
         """
         Aplica medidas anti-detección para parecer más humano
@@ -691,6 +803,9 @@ class XDetectorBot:
                 self.ad_count += 1
                 logging.info(
                     f"[💰] Clic en botón de monedas en ({target_x}, {target_y}) - Total ads: {self.ad_count}")
+            elif target_type == 'continue':
+                logging.info(
+                    f"[➡️] Clic en botón Continuar en ({target_x}, {target_y})")
 
             # Delay post-clic
             time.sleep(self.config['click_delay'])
@@ -783,6 +898,10 @@ class XDetectorBot:
                         if self.click_target(target['x'], target['y'], 'money'):
                             clicks_in_minute.append(current_time)
                             self.apply_anti_detection()
+                    elif target['type'] == 'continue':
+                        if self.click_target(target['x'], target['y'], 'continue'):
+                            clicks_in_minute.append(current_time)
+                            self.apply_anti_detection()
                 else:
                     time.sleep(0.1)
 
@@ -803,40 +922,75 @@ class XDetectorBot:
                     time.sleep(self.config['screenshot_interval'])
                     continue
 
+                ocr_tokens = self._extract_ocr_tokens(screenshot)
+                state, state_point = analyze_tokens(ocr_tokens, screenshot.shape)
+
+                if state == ScreenState.COUNTDOWN:
+                    if self.last_special_state != ScreenState.COUNTDOWN:
+                        logging.info(
+                            "⏳ Contador de recompensa detectado. Esperando finalización...")
+                    self.last_special_state = ScreenState.COUNTDOWN
+                    elapsed = time.time() - start_time
+                    time.sleep(max(
+                        0, self.config['screenshot_interval'] - elapsed))
+                    continue
+
                 all_detections = []
 
-                # Solo buscar X si no hemos hecho clic recientemente
-                time_since_last_x = time.time() - self.last_x_click_time
-                if time_since_last_x > 3:  # Esperar 3 segundos antes de buscar otra X
+                if 'template' in self.config['detection_methods'] and self.x_templates:
+                    all_detections.extend(
+                        self.detect_x_template_matching(screenshot))
 
-                    # Aplicar métodos de detección configurados
-                    if 'template' in self.config['detection_methods'] and self.x_templates:
-                        detections = self.detect_x_template_matching(
-                            screenshot)
-                        all_detections.extend(detections)
+                if 'contour' in self.config['detection_methods']:
+                    all_detections.extend(self.detect_x_contours(screenshot))
 
-                    if 'contour' in self.config['detection_methods']:
-                        detections = self.detect_x_contours(screenshot)
-                        all_detections.extend(detections)
+                if 'ocr' in self.config['detection_methods']:
+                    all_detections.extend(self.detect_x_ocr(screenshot))
 
-                    if 'ocr' in self.config['detection_methods']:
-                        detections = self.detect_x_ocr(screenshot)
-                        all_detections.extend(detections)
+                if 'color' in self.config['detection_methods']:
+                    all_detections.extend(self.detect_x_color_based(screenshot))
 
-                    if 'color' in self.config['detection_methods']:
-                        detections = self.detect_x_color_based(screenshot)
-                        all_detections.extend(detections)
-
-                # Fusionar detecciones
                 merged_detections = self.merge_detections(all_detections)
-
-                # Procesar solo detecciones de X (el botón de monedas se maneja después de X)
                 x_detections = [
                     d for d in merged_detections if d.get('type') == 'x']
 
+                handled_special = False
+                height = screenshot.shape[0]
+
+                if state == ScreenState.CONTINUE_ARROW and state_point:
+                    handled_special = True
+                    self._enqueue_special_action(
+                        'continue', ScreenState.CONTINUE_ARROW, state_point, screenshot.shape)
+                elif state == ScreenState.MAIN_REWARD_BUTTON and state_point:
+                    handled_special = True
+                    self._enqueue_special_action(
+                        'money', ScreenState.MAIN_REWARD_BUTTON, state_point, screenshot.shape)
+                elif state == ScreenState.REWARD_COMPLETE:
+                    handled_special = True
+                    reward_x = self._select_x_by_zone(
+                        x_detections, 0, int(height * 0.4))
+                    if reward_x:
+                        self._enqueue_special_action(
+                            'x', ScreenState.REWARD_COMPLETE,
+                            (reward_x['x'], reward_x['y']), screenshot.shape)
+                else:
+                    bottom_x = self._select_x_by_zone(
+                        x_detections, int(height * 0.55), height)
+                    if bottom_x:
+                        handled_special = self._enqueue_special_action(
+                            'x', ScreenState.AD_DISMISS,
+                            (bottom_x['x'], bottom_x['y']), screenshot.shape)
+
+                if handled_special:
+                    elapsed = time.time() - start_time
+                    time.sleep(max(
+                        0, self.config['screenshot_interval'] - elapsed))
+                    continue
+
+                self.last_special_state = ScreenState.UNKNOWN
+
                 for detection in x_detections:
                     if detection['confidence'] >= self.config['confidence_threshold']:
-                        # Crear hash para evitar clics duplicados
                         detection_hash = hashlib.md5(
                             f"{detection['x']}{detection['y']}".encode()
                         ).hexdigest()
@@ -849,11 +1003,11 @@ class XDetectorBot:
                             })
                             self.last_click_hash = detection_hash
 
-                            logging.info(f"[X] Detectada en ({detection['x']}, {detection['y']}) "
-                                         f"con confianza {detection['confidence']:.2f} "
-                                         f"usando métodos: {detection['methods']}")
+                            logging.info(
+                                "[X] Detectada en (%s, %s) con confianza %.2f usando métodos: %s",
+                                detection['x'], detection['y'],
+                                detection['confidence'], detection.get('methods'))
 
-                            # Solo procesar la primera detección de alta confianza
                             break
 
                 # Mantener intervalo de screenshots
