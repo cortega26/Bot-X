@@ -15,6 +15,8 @@ import tkinter as tk
 from tkinter import messagebox
 import re
 
+from calibration_utils import compute_display_scale, map_display_to_image_coords
+
 # Configuración de logging
 logging.basicConfig(
     level=logging.INFO,
@@ -906,136 +908,110 @@ class XDetectorBot:
             f"Bot detenido. X cerradas: {self.click_count}, Ads completados: {self.ad_count}")
 
     def calibrate_x(self):
-        """
-        Modo de calibración para capturar templates de X
-        """
+        """Calibrate X templates using mouse clicks inside the preview window."""
+
         print("\n" + "="*50)
-        print("    CALIBRACIÓN DE TEMPLATES DE X")
+        print("    CALIBRACIÓN DE TEMPLATES DE X (MODO CLICK)")
         print("="*50)
 
-        print("\n📌 INSTRUCCIONES:")
-        print("   1. Aparecerá una ventana mostrando BlueStacks")
-        print("   2. Cuando veas una X en el juego:")
-        print("      - Mueve el cursor sobre la X")
-        print("      - Presiona 'C' para capturar")
-        print("   3. Presiona 'Q' para terminar la calibración")
-        print("\n⚠️  IMPORTANTE: Haz clic en la ventana de calibración para activarla")
+        if not self.config['region']:
+            print("\n⚠️ Primero configura la región (opción 1)")
+            return
+
+        print("\n📌 NUEVO FLUJO:")
+        print("   1. Se abrirá una ventana con la vista de BlueStacks.")
+        print("   2. Haz CLICK IZQUIERDO sobre cada X que quieras capturar.")
+        print("   3. Presiona Q o Esc para terminar.")
+        print("\n💡 Consejo: Si la ventana tapa BlueStacks, muévela y sigue capturando.")
         print("="*50)
 
-        input("\n👉 Presiona ENTER para comenzar...")
+        input("\n👉 Presiona ENTER cuando estés listo...")
+
+        folder = self.config['templates_folder']
+        os.makedirs(folder, exist_ok=True)
+
+        existing = [
+            f for f in os.listdir(folder)
+            if f.lower().startswith('x_template')
+        ]
+        template_count = len(existing)
+        captures = 0
+
+        window_name = "Calibración de X — Click para capturar | Q/Esc para salir"
+        cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
+
+        _, _, width, height = self.config['region']
+        scale = compute_display_scale(width, height)
+
+        last_frame = {'image': None}
+
+        def on_mouse(event, x, y, flags, param):
+            nonlocal template_count, captures
+            if event == cv2.EVENT_LBUTTONDOWN and last_frame['image'] is not None:
+                frame = last_frame['image']
+                x_img, y_img = map_display_to_image_coords(x, y, scale)
+
+                size = 50
+                x1 = max(0, x_img - size // 2)
+                y1 = max(0, y_img - size // 2)
+                x2 = min(frame.shape[1], x_img + size // 2)
+                y2 = min(frame.shape[0], y_img + size // 2)
+
+                if x2 <= x1 or y2 <= y1:
+                    logging.info("⚠️  Área de captura inválida; ignora clic")
+                    return
+
+                roi = frame[y1:y2, x1:x2]
+                if roi.shape[0] < 20 or roi.shape[1] < 20:
+                    logging.info("⚠️  Región demasiado pequeña; ignora clic")
+                    return
+
+                template_count += 1
+                captures += 1
+                filename = f"x_template_{template_count}.png"
+                filepath = os.path.join(folder, filename)
+                cv2.imwrite(filepath, roi)
+                logging.info("✅ Template #%s guardado: %s", captures, filename)
+
+        cv2.setMouseCallback(window_name, on_mouse)
 
         try:
-            # Contar templates existentes
-            template_count = len([f for f in os.listdir(self.config['templates_folder'])
-                                  if 'x_template' in f]) if os.path.exists(self.config['templates_folder']) else 0
-
-            captures = 0
-            window_name = "Calibracion de X - Presiona C para capturar, Q para salir"
-            cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
-
-            # Obtener tamaño de la región para redimensionar ventana apropiadamente
-            if self.config['region']:
-                _, _, width, height = self.config['region']
-                window_width = min(800, width)
-                window_height = min(600, height)
-                cv2.resizeWindow(window_name, window_width, window_height)
-
-            print("\n🎯 Ventana de calibración abierta")
-            print("   Haz clic en ella y usa las teclas C y Q\n")
-
-            last_capture_time = 0
-
             while True:
-                screenshot = self.take_screenshot()
+                frame = self.take_screenshot()
+                if frame is None:
+                    time.sleep(0.05)
+                    continue
 
-                if screenshot is not None:
-                    # Dibujar cruz en el centro para referencia
-                    display = screenshot.copy()
-                    h, w = display.shape[:2]
-                    cv2.line(display, (w//2-20, h//2),
-                             (w//2+20, h//2), (0, 255, 0), 2)
-                    cv2.line(display, (w//2, h//2-20),
-                             (w//2, h//2+20), (0, 255, 0), 2)
+                last_frame['image'] = frame
+                display = frame.copy()
 
-                    # Mostrar instrucciones en la imagen
-                    cv2.putText(display, "C=Capturar X | Q=Salir", (10, 30),
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
-                    cv2.putText(display, f"Capturas: {captures}", (10, 60),
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 255), 2)
+                cv2.putText(display, "CLICK: capturar | Q/Esc: salir", (10, 30),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+                cv2.putText(display, f"Capturas: {captures}", (10, 60),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 255), 2)
 
-                    # Mostrar posición actual del mouse
-                    mouse_x, mouse_y = pyautogui.position()
-                    if self.config['region']:
-                        rel_x = mouse_x - self.config['region'][0]
-                        rel_y = mouse_y - self.config['region'][1]
-                        if 0 <= rel_x < w and 0 <= rel_y < h:
-                            # Dibujar círculo donde está el mouse
-                            cv2.circle(display, (rel_x, rel_y),
-                                       25, (255, 0, 0), 2)
-                            cv2.putText(display, f"Mouse: ({rel_x}, {rel_y})", (10, h-10),
-                                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+                if scale != 1.0:
+                    disp = cv2.resize(
+                        display,
+                        (int(width * scale), int(height * scale)),
+                        interpolation=cv2.INTER_AREA
+                    )
+                else:
+                    disp = display
 
-                    cv2.imshow(window_name, display)
-
-                # Esperar tecla con timeout corto
+                cv2.imshow(window_name, disp)
                 key = cv2.waitKey(30) & 0xFF
-
-                # Evitar capturas múltiples muy rápidas
-                current_time = time.time()
-
-                if key == ord('c') or key == ord('C'):
-                    if current_time - last_capture_time > 0.5:  # Mínimo 0.5s entre capturas
-                        if screenshot is not None:
-                            # Obtener posición del mouse
-                            x, y = pyautogui.position()
-
-                            # Ajustar para región
-                            if self.config['region']:
-                                x -= self.config['region'][0]
-                                y -= self.config['region'][1]
-
-                                # Verificar que el cursor está dentro de la región
-                                if x < 0 or y < 0 or x >= screenshot.shape[1] or y >= screenshot.shape[0]:
-                                    print(
-                                        "⚠️  El cursor está fuera de la región de BlueStacks")
-                                    continue
-
-                            # Extraer región alrededor del cursor (50x50 píxeles)
-                            size = 50
-                            x1 = max(0, x - size // 2)
-                            y1 = max(0, y - size // 2)
-                            x2 = min(screenshot.shape[1], x + size // 2)
-                            y2 = min(screenshot.shape[0], y + size // 2)
-
-                            if x2 > x1 and y2 > y1:
-                                roi = screenshot[y1:y2, x1:x2]
-
-                                # Guardar template
-                                template_count += 1
-                                captures += 1
-                                filename = f"x_template_{template_count}.png"
-                                filepath = os.path.join(
-                                    self.config['templates_folder'], filename)
-                                cv2.imwrite(filepath, roi)
-
-                                print(
-                                    f"✅ Template #{captures} guardado: {filename}")
-                                last_capture_time = current_time
-                            else:
-                                print("⚠️  Área de captura inválida")
-
-                elif key == ord('q') or key == ord('Q') or key == 27:  # Q o ESC
+                if key in (ord('q'), ord('Q'), 27):
                     break
 
             cv2.destroyAllWindows()
-
-            # Recargar templates
             self.load_templates()
 
             print("\n" + "="*50)
-            print(f"✅ CALIBRACIÓN COMPLETADA")
-            print(f"   Templates capturados: {captures}")
-            print(f"   Total de templates de X: {len(self.x_templates)}")
+            print("✅ CALIBRACIÓN COMPLETADA")
+            print(f"   Templates capturados en esta sesión: {captures}")
+            print(
+                f"   Total de templates de X disponibles: {len(self.x_templates)}")
             print("="*50)
 
         except Exception as e:
@@ -1134,7 +1110,7 @@ def main_menu():
     while True:
         print("\n📋 MENÚ PRINCIPAL:")
         print("1. 🎯 Configurar región de BlueStacks")
-        print("2. 📸 Calibrar templates de X")
+        print("2. 📸 Calibrar templates de X (click en la ventana)")
         print("3. 💰 Calibrar botón de monedas")
         print("4. ▶️  Iniciar Bot")
         print("5. 📊 Ver configuración actual")
