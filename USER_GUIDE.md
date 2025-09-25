@@ -31,10 +31,14 @@ installation directory to the `PATH` environment variable. On macOS you can run
    window.
 
 3. **Capture templates (optional but recommended)**
-   - Option `2` records additional close buttons (`X`). Click directly on each
-     `X` you want to save; press `Q` when done.
-   - Option `3` captures button templates for the `+200 monedas` CTA. Click on
-     the button inside the calibration preview.
+   - Option `2` now imports ready-made captures of the close button (`X`). Place
+     the reference image(s) inside `templates/reference/` (for example the
+     screenshot containing `X/Continuar/Recompensa en X segundos`) and provide
+     the path when prompted. The helper copies them into the working templates
+     folder without opening an extra window.
+   - Option `3` works the same way for the `+200 monedas por ver un anuncio`
+     button: point the prompt to the supplied screenshot and the bot will store
+     grayscale templates automatically.
 
 4. **Start the bot**
    - From the interactive menu choose option `4`.

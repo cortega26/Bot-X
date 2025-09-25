@@ -2,6 +2,12 @@
 
 from __future__ import annotations
 
+import os
+import re
+from typing import Iterable, List
+
+import cv2
+
 
 def compute_display_scale(
     width: int,
@@ -43,4 +49,94 @@ def map_display_to_image_coords(x: int, y: int, scale: float) -> tuple[int, int]
     x_img = int(round(x / scale))
     y_img = int(round(y / scale))
     return x_img, y_img
+
+
+def _next_template_index(
+    destination_dir: str,
+    prefix: str,
+    existing: Iterable[str] | None = None,
+) -> int:
+    """Return the next sequential index for ``prefix`` templates.
+
+    Parameters
+    ----------
+    destination_dir:
+        Directory that contains the templates.
+    prefix:
+        Prefix used to build template file names (e.g. ``"x_template"``).
+    existing:
+        Optional iterable of filenames to inspect instead of reading the
+        filesystem. Useful for testing.
+    """
+
+    pattern = re.compile(rf"^{re.escape(prefix)}_(\d+)\.\w+$", re.IGNORECASE)
+
+    if existing is None:
+        try:
+            existing = os.listdir(destination_dir)
+        except FileNotFoundError:
+            existing = []
+
+    indices = [
+        int(match.group(1))
+        for name in existing
+        if (match := pattern.match(name)) is not None
+    ]
+
+    return max(indices, default=0) + 1
+
+
+def import_reference_templates(
+    file_paths: Iterable[str],
+    destination_dir: str,
+    prefix: str,
+) -> List[str]:
+    """Copy reference images into the template folder.
+
+    The helper reads each ``file_paths`` entry, converts the image to
+    grayscale and stores it in ``destination_dir`` using a sequential
+    ``{prefix}_N.png`` naming scheme. The new filenames are returned in the
+    order they were processed.
+    """
+
+    file_paths = list(file_paths)
+    if not file_paths:
+        raise ValueError("at least one reference image path is required")
+
+    os.makedirs(destination_dir, exist_ok=True)
+    next_index = _next_template_index(destination_dir, prefix)
+
+    saved_files: List[str] = []
+
+    for path in file_paths:
+        if not os.path.isfile(path):
+            raise FileNotFoundError(f"reference image not found: {path}")
+
+        image = cv2.imread(path, cv2.IMREAD_UNCHANGED)
+        if image is None:
+            raise ValueError(f"unable to read image: {path}")
+
+        if image.ndim == 2:
+            gray = image
+        else:
+            channels = image.shape[2]
+            if channels == 4:
+                gray = cv2.cvtColor(image, cv2.COLOR_BGRA2GRAY)
+            elif channels == 3:
+                gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            else:
+                raise ValueError(
+                    "unsupported channel count for image conversion: "
+                    f"{channels}"
+                )
+
+        filename = f"{prefix}_{next_index}.png"
+        output_path = os.path.join(destination_dir, filename)
+        if not cv2.imwrite(output_path, gray):
+            raise ValueError(f"failed to write template: {output_path}")
+
+        saved_files.append(filename)
+        next_index += 1
+
+    return saved_files
 
