@@ -87,3 +87,34 @@
 2025-09-25 13:22:00,399 - INFO - 📊 Estadísticas - X cerradas: 2, Ads vistos: 0
 2025-09-25 13:22:14,900 - INFO - Deteniendo bot...
 2025-09-25 13:22:16,900 - INFO - Bot detenido. X cerradas: 2, Ads completados: 0
+2025-09-25 13:35:28,568 - INFO - Template de X cargado: Continuar.png
+2025-09-25 13:35:28,570 - INFO - Template de monedas cargado: money_button_1.png
+2025-09-25 13:35:28,574 - INFO - Template de X cargado: pantalla_inicial.png
+2025-09-25 13:35:28,583 - INFO - Template de X cargado: recompensa_conseguida.png
+2025-09-25 13:35:28,598 - INFO - Template de X cargado: recompensa_en_x_segundos.png
+2025-09-25 13:35:28,603 - INFO - Template de X cargado: x_template_1.png
+2025-09-25 13:35:28,606 - INFO - Template de X cargado: x_template_2.png
+2025-09-25 13:35:28,612 - INFO - Template de X cargado: x_template_3.png
+2025-09-25 13:35:28,613 - INFO - Bot inicializado con configuración: {'screenshot_interval': 0.5, 'confidence_threshold': 0.75, 'click_delay': 0.5, 'safe_mode': True, 'detection_methods': ['template', 'contour', 'ocr', 'color'], 'templates_folder': 'templates', 'click_offset': {'x': 0, 'y': 0}, 'region': None, 'max_clicks_per_minute': 60, 'enable_anti_detection': True, 'money_button_zone': 0.7, 'wait_after_x': 1.0, 'auto_click_money': True}
+2025-09-25 13:35:52,146 - INFO - Bot iniciado correctamente
+2025-09-25 13:35:52,147 - INFO - Buscando X y botones de monedas...
+2025-09-25 13:36:00,207 - INFO - 📊 Estadísticas - X cerradas: 0, Ads vistos: 0
+2025-09-25 13:36:30,223 - INFO - 📊 Estadísticas - X cerradas: 0, Ads vistos: 0
+2025-09-25 13:36:37,528 - INFO - [X:ad_dismiss] Acción guiada en (365, 860)
+2025-09-25 13:36:38,528 - INFO - [X] Clic en X realizado en (2278, 946) - Total X: 1
+2025-09-25 13:36:39,024 - INFO - [X:ad_dismiss] Acción guiada en (36, 1060)
+2025-09-25 13:36:40,389 - INFO - [X:ad_dismiss] Acción guiada en (71, 752)
+2025-09-25 13:36:40,682 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:36:40,682 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:36:41,770 - INFO - [X] Clic en X realizado en (1949, 1146) - Total X: 2
+2025-09-25 13:36:43,102 - INFO - [X:ad_dismiss] Acción guiada en (108, 638)
+2025-09-25 13:36:43,747 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:36:43,747 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:36:44,257 - INFO - [X:ad_dismiss] Acción guiada en (71, 752)
+2025-09-25 13:36:45,215 - INFO - [X] Clic en X realizado en (1984, 838) - Total X: 3
+2025-09-25 13:36:46,619 - INFO - [X:ad_dismiss] Acción guiada en (380, 779)
+2025-09-25 13:36:47,149 - INFO - Deteniendo bot...
+2025-09-25 13:36:47,274 - INFO - No se detectó botón de monedas, usando fallback
+2025-09-25 13:36:47,274 - INFO - [💰] Intento fallback de clic en zona inferior
+2025-09-25 13:36:47,732 - INFO - [X] Detectada en (481, 412) con confianza 0.77 usando métodos: ['color', 'contour']
+2025-09-25 13:36:49,150 - INFO - Bot detenido. X cerradas: 3, Ads completados: 3
