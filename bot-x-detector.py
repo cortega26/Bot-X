@@ -1,21 +1,285 @@
-import cv2
-import numpy as np
-import pyautogui
-import time
-import logging
-from datetime import datetime
-import os
-import json
-from threading import Thread
-from queue import Queue
-import pytesseract
-from PIL import Image
+import glob
 import hashlib
+import json
+import logging
+import os
+import re
+import shlex
+import time
+from datetime import datetime
+from queue import Queue
+from threading import Thread
+
+try:
+    import numpy as _np
+except ModuleNotFoundError:  # pragma: no cover - exercised indirectly in tests
+    class _ArrayPlaceholder:
+        def __init__(self, shape=()):
+            self.shape = shape
+            self.ndim = len(shape)
+
+        def __iter__(self):
+            return iter(())
+
+
+    class _RandomStub:
+        @staticmethod
+        def randint(*args, **kwargs):
+            return 0
+
+        @staticmethod
+        def uniform(*args, **kwargs):
+            return 0.0
+
+
+    class _NumpyStub:
+        _is_stub = True
+        float32 = float
+        uint8 = int
+        ndarray = _ArrayPlaceholder
+        pi = 3.141592653589793
+
+        def __init__(self) -> None:
+            self._logger = logging.getLogger(__name__)
+            self._logger.warning(
+                "NumPy is not installed. Falling back to a limited stub; "
+                "numerical operations are disabled."
+            )
+            self.random = _RandomStub()
+
+        @staticmethod
+        def _infer_shape(obj) -> tuple[int, ...]:
+            shape: tuple[int, ...] = ()
+            current = obj
+            while isinstance(current, (list, tuple)) and current:
+                shape += (len(current),)
+                current = current[0]
+            return shape
+
+        def zeros(self, shape, dtype=None):  # noqa: D401 - mimic numpy API
+            return _ArrayPlaceholder(shape)
+
+        def ones(self, shape, dtype=None):
+            return _ArrayPlaceholder(shape)
+
+        def zeros_like(self, other):
+            return _ArrayPlaceholder(getattr(other, "shape", ()))
+
+        def array(self, obj, dtype=None):
+            if isinstance(obj, _ArrayPlaceholder):
+                return obj
+            return _ArrayPlaceholder(self._infer_shape(obj))
+
+        def asarray(self, obj):
+            return self.array(obj)
+
+        def linspace(self, start, stop, num, endpoint=True):
+            if num <= 0:
+                return []
+            if num == 1:
+                return [start]
+            step = (stop - start) / (num - 1 if endpoint else num)
+            return [start + i * step for i in range(num)]
+
+        @staticmethod
+        def where(condition):
+            return ([], [])
+
+        @staticmethod
+        def degrees(value):
+            return value
+
+        @staticmethod
+        def sqrt(value):
+            return 0.0
+
+    _np = _NumpyStub()
+
+np = _np
+import pyautogui
+import pytesseract
+
+try:
+    from PIL import Image as _Image
+except ModuleNotFoundError:  # pragma: no cover - exercised indirectly in tests
+    class _ImageStub:
+        def fromarray(self, *args, **kwargs):
+            raise RuntimeError(
+                "Pillow (PIL) is required for image conversions but is not installed."
+            )
+
+    _Image = _ImageStub()
+
+Image = _Image
 import tkinter as tk
 from tkinter import messagebox
-import re
-import glob
-import shlex
+
+try:
+    import cv2 as _cv2
+except ModuleNotFoundError:  # pragma: no cover - exercised indirectly in tests
+    _cv2 = None
+
+
+class _OpenCVStub:
+    """Fallback minimal implementation when :mod:`cv2` is unavailable."""
+
+    _is_stub = True
+
+    COLOR_RGB2BGR = 0
+    COLOR_BGR2GRAY = 1
+    COLOR_BGR2RGB = 2
+    COLOR_BGR2HSV = 3
+    TM_CCOEFF_NORMED = 4
+    IMREAD_GRAYSCALE = 5
+    WINDOW_NORMAL = 6
+    RETR_EXTERNAL = 7
+    CHAIN_APPROX_SIMPLE = 8
+    MORPH_CLOSE = 9
+    MORPH_OPEN = 10
+    FONT_HERSHEY_SIMPLEX = 11
+
+    def __init__(self) -> None:
+        self._logger = logging.getLogger(__name__)
+        self._logger.warning(
+            "OpenCV (cv2) is not installed. Falling back to a limited stub; "
+            "image processing features are disabled."
+        )
+
+    # --- Utility helpers -------------------------------------------------
+    @staticmethod
+    def _ensure_array(image: np.ndarray) -> np.ndarray:
+        return np.asarray(image)
+
+    # --- Basic image ops -------------------------------------------------
+    def cvtColor(self, image: np.ndarray, code: int) -> np.ndarray:  # noqa: N802 (OpenCV API)
+        arr = self._ensure_array(image)
+        if code == self.COLOR_BGR2GRAY:
+            if arr.ndim == 3:
+                return arr.mean(axis=2).astype(arr.dtype)
+            return arr
+        if code in (self.COLOR_RGB2BGR, self.COLOR_BGR2RGB):
+            if arr.ndim == 3:
+                return arr[..., ::-1]
+            return arr
+        if code == self.COLOR_BGR2HSV:
+            return np.zeros_like(arr)
+        return arr
+
+    @staticmethod
+    def rectangle(*args, **kwargs) -> None:  # noqa: D401 - OpenCV compat
+        """No-op placeholder."""
+
+    @staticmethod
+    def putText(*args, **kwargs) -> None:
+        return None
+
+    @staticmethod
+    def imwrite(*args, **kwargs) -> bool:
+        return True
+
+    @staticmethod
+    def namedWindow(*args, **kwargs) -> None:
+        return None
+
+    @staticmethod
+    def resizeWindow(*args, **kwargs) -> None:
+        return None
+
+    @staticmethod
+    def imshow(*args, **kwargs) -> None:
+        return None
+
+    @staticmethod
+    def waitKey(*args, **kwargs) -> int:
+        return -1
+
+    @staticmethod
+    def destroyAllWindows() -> None:
+        return None
+
+    def imread(self, *args, **kwargs) -> None:
+        self._logger.debug("Skipping template load because cv2 is unavailable.")
+        return None
+
+    def resize(self, image: np.ndarray, dsize, interpolation=None) -> np.ndarray:  # noqa: N803
+        arr = self._ensure_array(image)
+        width, height = dsize
+        mode = 'L' if arr.ndim == 2 else 'RGB'
+        try:
+            pil_image = Image.fromarray(arr.astype(np.uint8), mode=mode)
+            resized = pil_image.resize((width, height))
+            result = np.asarray(resized)
+        except Exception:  # pragma: no cover - best-effort stub
+            self._logger.debug("No se pudo redimensionar usando Pillow en el stub.")
+            return arr
+        if arr.ndim == 2 and result.ndim == 3:
+            return result[:, :, 0]
+        return result
+
+    @staticmethod
+    def matchTemplate(image: np.ndarray, template: np.ndarray, method: int) -> np.ndarray:  # noqa: N802
+        image = np.asarray(image)
+        template = np.asarray(template)
+        if image.ndim != 2 or template.ndim != 2:
+            raise ValueError("Stub matchTemplate expects 2D arrays")
+        out_shape = (
+            max(image.shape[0] - template.shape[0] + 1, 0),
+            max(image.shape[1] - template.shape[1] + 1, 0),
+        )
+        if 0 in out_shape:
+            return np.zeros((0, 0), dtype=np.float32)
+        return np.zeros(out_shape, dtype=np.float32)
+
+    @staticmethod
+    def Canny(image: np.ndarray, threshold1: int, threshold2: int) -> np.ndarray:  # noqa: N802
+        return np.zeros_like(image)
+
+    @staticmethod
+    def findContours(image: np.ndarray, mode: int, method: int):  # noqa: N802
+        return [], None
+
+    @staticmethod
+    def contourArea(contour) -> float:  # noqa: N802
+        return 0.0
+
+    @staticmethod
+    def boundingRect(contour):  # noqa: N802
+        return 0, 0, 0, 0
+
+    @staticmethod
+    def GaussianBlur(image: np.ndarray, ksize, sigmaX: float) -> np.ndarray:  # noqa: N802
+        return np.asarray(image)
+
+    @staticmethod
+    def arcLength(contour, closed: bool) -> float:  # noqa: N802
+        return 0.0
+
+    @staticmethod
+    def approxPolyDP(contour, epsilon: float, closed: bool):  # noqa: N802
+        return contour
+
+    @staticmethod
+    def HoughLines(image: np.ndarray, rho: float, theta: float, threshold: int):  # noqa: N802
+        return None
+
+    @staticmethod
+    def inRange(image: np.ndarray, lower, upper) -> np.ndarray:  # noqa: N802
+        return np.zeros_like(image[:, :, 0]) if image.ndim == 3 else np.zeros_like(image)
+
+    @staticmethod
+    def morphologyEx(image: np.ndarray, op: int, kernel: np.ndarray) -> np.ndarray:  # noqa: N802
+        return np.asarray(image)
+
+
+cv2 = _cv2 if _cv2 is not None else _OpenCVStub()
+
+
+def _has_real_numpy() -> bool:
+    return not getattr(np, "_is_stub", False)
+
+
+def _has_real_cv2() -> bool:
+    return not getattr(cv2, "_is_stub", False)
 
 from calibration_utils import import_reference_templates
 from screen_state import OCRToken, ScreenState, analyze_tokens
@@ -87,6 +351,11 @@ class RegionSelector:
         """
         Muestra un preview de la región seleccionada
         """
+        if not (_has_real_numpy() and _has_real_cv2()):
+            logging.warning(
+                "Preview no disponible: requiere NumPy y OpenCV reales.")
+            return
+
         try:
             print("\n📸 Capturando preview de la región...")
 
@@ -194,6 +463,11 @@ class XDetectorBot:
         """
         Carga templates de imágenes de X y botón de monedas
         """
+        if not _has_real_cv2():
+            logging.warning(
+                "OpenCV no está disponible; omitiendo carga de templates.")
+            return
+
         self.x_templates = []
         self.money_templates = []
 
@@ -277,6 +551,11 @@ class XDetectorBot:
             else:
                 screenshot = pyautogui.screenshot()
 
+            if not (_has_real_numpy() and _has_real_cv2()):
+                logging.warning(
+                    "No es posible convertir el screenshot sin NumPy y OpenCV.")
+                return None
+
             # Convertir a formato OpenCV
             screenshot_np = np.array(screenshot)
             screenshot_cv = cv2.cvtColor(screenshot_np, cv2.COLOR_RGB2BGR)
@@ -290,6 +569,11 @@ class XDetectorBot:
         """
         Detecta X usando template matching con múltiples escalas
         """
+        if not (_has_real_numpy() and _has_real_cv2()):
+            logging.debug(
+                "detect_x_template_matching deshabilitado por falta de dependencias")
+            return []
+
         detections = []
         gray = cv2.cvtColor(screenshot, cv2.COLOR_BGR2GRAY)
 
@@ -337,6 +621,11 @@ class XDetectorBot:
         """
         Detecta el botón de monedas en la zona inferior
         """
+        if not (_has_real_numpy() and _has_real_cv2()):
+            logging.debug(
+                "detect_money_button deshabilitado por falta de dependencias")
+            return []
+
         detections = []
         height, width = screenshot.shape[:2]
 

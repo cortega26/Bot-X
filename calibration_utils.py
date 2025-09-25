@@ -6,7 +6,18 @@ import os
 import re
 from typing import Iterable, List
 
-import cv2
+try:
+    import cv2 as _cv2
+except ModuleNotFoundError:  # pragma: no cover - exercised indirectly in tests
+    _cv2 = None
+
+
+def _require_cv2():
+    if _cv2 is None:
+        raise RuntimeError(
+            "OpenCV (cv2) is required for calibration utilities but is not installed."
+        )
+    return _cv2
 
 
 def compute_display_scale(
@@ -104,6 +115,7 @@ def import_reference_templates(
         raise ValueError("at least one reference image path is required")
 
     os.makedirs(destination_dir, exist_ok=True)
+    opencv = _require_cv2()
     next_index = _next_template_index(destination_dir, prefix)
 
     saved_files: List[str] = []
@@ -112,7 +124,7 @@ def import_reference_templates(
         if not os.path.isfile(path):
             raise FileNotFoundError(f"reference image not found: {path}")
 
-        image = cv2.imread(path, cv2.IMREAD_UNCHANGED)
+        image = opencv.imread(path, opencv.IMREAD_UNCHANGED)
         if image is None:
             raise ValueError(f"unable to read image: {path}")
 
@@ -121,9 +133,9 @@ def import_reference_templates(
         else:
             channels = image.shape[2]
             if channels == 4:
-                gray = cv2.cvtColor(image, cv2.COLOR_BGRA2GRAY)
+                gray = opencv.cvtColor(image, opencv.COLOR_BGRA2GRAY)
             elif channels == 3:
-                gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+                gray = opencv.cvtColor(image, opencv.COLOR_BGR2GRAY)
             else:
                 raise ValueError(
                     "unsupported channel count for image conversion: "
@@ -132,7 +144,7 @@ def import_reference_templates(
 
         filename = f"{prefix}_{next_index}.png"
         output_path = os.path.join(destination_dir, filename)
-        if not cv2.imwrite(output_path, gray):
+        if not opencv.imwrite(output_path, gray):
             raise ValueError(f"failed to write template: {output_path}")
 
         saved_files.append(filename)
